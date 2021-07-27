@@ -6,7 +6,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from quantrans.builder import QUANLAYERS
+from ..builder import QUANLAYERS
 
 
 # this function construct an additive pot quantization levels set, with clipping threshold = 1,

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from quantrans.builder import QUANLAYERS 
+from ..builder import QUANLAYERS 
 
 
 class RoundWithGradient(torch.autograd.Function):

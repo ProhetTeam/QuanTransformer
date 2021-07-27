@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 # from torch.nn.modules.module import register_module_backward_hook
 from torch.nn.parameter import Parameter
-from quantrans.builder import QUANLAYERS
+from ..builder import QUANLAYERS
 import torch.nn.functional as F
 
 class Qmodes(Enum):

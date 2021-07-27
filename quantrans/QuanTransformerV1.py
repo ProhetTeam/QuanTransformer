@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from .BaseQuanTransformer import BaseQuanTransformer
 from .builder import QUANTRANSFORMERS
-from .builder import build_quanlayer
+from .quantops.builder import build_quanlayer
 from .utils import dict_merge
 
 @QUANTRANSFORMERS.register_module()
