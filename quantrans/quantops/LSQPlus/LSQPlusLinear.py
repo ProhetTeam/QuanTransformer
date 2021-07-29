@@ -21,6 +21,11 @@ def round_pass(x):
 
 @QUANLAYERS.register_module()
 class LSQPlusLinear(nn.Linear):
+    """Generates quantized linear layers.
+
+Same as LSQPlusConv()
+
+"""
     def __init__(self, in_features, out_features, bias=True, nbits_w=8, nbits_a=8, signed=False, add_offset = True):
         super(LSQPlusLinear, self).__init__(in_features, out_features, bias=bias)
         self.nbits_w = nbits_w

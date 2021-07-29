@@ -22,6 +22,16 @@ def round_pass(x):
 
 @QUANLAYERS.register_module()
 class LSQConv2d(nn.Conv2d):
+    """Generates quantized convolutional layers.
+
+args:
+    bit_w(int): bitwidth for the weight quantization,
+    bit_a(int): bitwidth for the activation quantization,
+procedure:
+    1.define the learnable scale 
+    2.define the parameter g by 1.0 / math.sqrt(x.numel() * Qp)
+"""
+
     def __init__(
         self,
         in_channels,

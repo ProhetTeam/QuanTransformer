@@ -53,6 +53,11 @@ def lsq_quantization_linear(weight , nbits, alpha, training, init_state):
 
 @QUANLAYERS.register_module()
 class LSQLinear(nn.Linear):
+    """Generates quantized linear layers.
+
+Same as LSQConv()
+
+"""
     def __init__(self, in_features, out_features, bias=True, nbits_w=8, nbits_a=8, signed=False):
         super(LSQLinear, self).__init__(in_features, out_features, bias=bias)
         self.nbits_w = nbits_w

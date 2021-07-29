@@ -73,6 +73,13 @@ class LSQPlus(torch.autograd.Function):
 
 @QUANLAYERS.register_module()
 class LSQPlusConv2d(nn.Conv2d):
+    """Generates quantized convolutional layers.
+
+args:
+nbits_w(int): bitwidth for the weight quantization,
+nbits_a(int): bitwidth for the activation quantization,
+
+"""
     def __init__(
         self,
         in_channels,
