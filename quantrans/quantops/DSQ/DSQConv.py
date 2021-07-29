@@ -16,21 +16,63 @@ class RoundWithGradient(torch.autograd.Function):
 
 @QUANLAYERS.register_module()
 class DSQConv(nn.Conv2d):
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True,
-                momentum = 0.1,
-                num_bit_w = 8,
-                num_bit_a = 8,
-                quant_activation = True,
-                bSetQ = True,
-                alpha_thres = 0.5,
-                debug = False, 
-                bias_quant = False):
+    """Applies a quantized 2D convolution layers in DSQ way.
+
+    Args:
+        in_channels (int): Number of channels in the input image
+        out_channels (int): Number of channels produced by the convolution
+        kernel_size (int or tuple): Size of the convolving kernel
+        stride (int or tuple, optional): Stride of the convolution. Default: 1
+        padding (int, tuple or str, optional): Padding added to both sides of
+            the input. Default: 0
+        dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
+        groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1
+        bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+        momentum (float, optional): The momentum value used for the running_bound computation. Default: 0.1
+        nbits_w (int): Bitwidth for the weight quantization
+        nbits_a (int): Bitwidth for the activation quantization
+        quant_activation (bool, optional): If ``True``, quantizes activation. Default: ``True``
+        bSetQ (bool, optional): If ``True``, performs quantization. Default: ``True``
+        alpha_thres (float, optinal): The threshold used for alpha clipping. Default: 0.5
+        debug (bool, optional):  If ``True``, saves quantized results. Default: ``False`` 
+        bias_quant (bool, optional): If ``True``, quantizes bias. Default: ``False`` 
+    Procedure:
+       
+       Quantization
+        .. math::
+            \varphi(x) = s \tanh{k(x-m_i)},
+            output = \min{quant_max, \max{quant_min, l + \Delta (i+\frac{\varphi(x)+1}{2})}}.
+        
+        `quant_max`:  running upper bound of the quantized domain
+        `quant_min`:  running lower bound of the quantized domain
+        :math:`\Delta`: quantization scale
+
+    """
+    def __init__(
+        self, 
+        in_channels, 
+        out_channels, 
+        kernel_size,
+        stride=1, 
+        padding=0, 
+        dilation=1, 
+        groups=1, 
+        bias=True,
+        momentum = 0.1,
+        nbits_w = 8,
+        nbits_a = 8,
+        quant_activation = True,
+        bSetQ = True,
+        alpha_thres = 0.5,
+        debug = False, 
+        bias_quant = False
+    ):
         super(DSQConv, self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias)
-        self.num_bit_w = num_bit_w
-        self.num_bit_a = num_bit_a
+        self.nbits_w = nbits_w
+        self.nbits_a = nbits_a
         self.quant_activation = quant_activation
-        self.bit_range_w = 2**self.num_bit_w - 1
-        self.bit_range_a = 2**self.num_bit_a - 1
+        self.bit_range_w = 2**self.nbits_w - 1
+        self.bit_range_a = 2**self.nbits_a - 1
         self.is_quan = bSetQ
         self.momentum = momentum
         self.alpha_thres = alpha_thres
