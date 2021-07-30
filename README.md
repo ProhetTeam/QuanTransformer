@@ -1,11 +1,11 @@
 
 
-###Prerequisite
+**Prerequisite**
 -Pytorch 1.3+
 -Python 3+
 
 
-###Installation
+**Installation**
 
 ```shell
 ├── quantrans
