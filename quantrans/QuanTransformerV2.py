@@ -15,6 +15,13 @@ from .utils import dict_merge
 
 @QUANTRANSFORMERS.register_module()
 class QuanTransformerV2(BaseQuanTransformer, nn.Module):
+    """
+    Args: 
+    quan_policy(dict()): which quantization method you want to use.
+    special_layers: you can assign some special layers which you want to use special quantization methods \
+    (for instance, the first conv layer and the last fc layer often adopts 8-bit quantization)
+
+    """
     def __init__(self, 
                  quan_policy = dict(),
                  special_layers = None,
@@ -32,7 +39,7 @@ class QuanTransformerV2(BaseQuanTransformer, nn.Module):
         r""" Convert float Model to quantization Model
         Args:
             model(nn.Module): Standard Model
-            excludes_layers(list): Some layers u dnot want to quatify
+            excludes_layers(list): Some layers you do not want to quatify
             lagger: logger 
         Return:
             New Model: replace with quantization layers
@@ -42,7 +49,7 @@ class QuanTransformerV2(BaseQuanTransformer, nn.Module):
             if logger is not None:
                 logger.info(f'There is NO layer to be quantified!')
             else:
-                pritn('There is NO layer to be quantified!')
+                print('There is NO layer to be quantified!')
             return model
         
         for module_name in model._modules:
