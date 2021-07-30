@@ -1,11 +1,11 @@
 
 
-**Prerequisite**
--Pytorch 1.3+
--Python 3+
+### Prerequisite
+- Pytorch 1.3+
+- Python 3+
+- CUDA 10+
 
-
-**Installation**
+### Installation
 
 ```shell
 ├── quantrans
