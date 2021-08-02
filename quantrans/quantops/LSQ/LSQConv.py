@@ -25,11 +25,15 @@ class LSQConv2d(nn.Conv2d):
     """Generates quantized convolutional layers.
 
 args:
-    bit_w(int): bitwidth for the weight quantization,
-    bit_a(int): bitwidth for the activation quantization,
+    nbits_w(int): bitwidth for the weight quantization,
+    nbits_a(int): bitwidth for the activation quantization,
 procedure:
-    1.define the learnable scale 
-    2.define the parameter g by 1.0 / math.sqrt(x.numel() * Qp)
+    1.the quantizd representation of the data v_q can be calculated by follows:
+    v_q = round(clip(\frac{v}{s}, -Q_N, Q_P)),
+    where the scale s is learnable parameter.
+    2. besides, the hypeparameter g can be defined by \frac{1.0}{\sqrt(x.numel() \times Q_P)}
+
+    details can see in https://arxiv.org/pdf/1902.08153.pdf
 """
 
     def __init__(

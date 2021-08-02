@@ -23,7 +23,7 @@ def round_pass(x):
 class LSQPlusLinear(nn.Linear):
     """Generates quantized linear layers.
 
-Same as LSQPlusConv()
+    same as LSQPlusConv()
 
 """
     def __init__(self, in_features, out_features, bias=True, nbits_w=8, nbits_a=8, signed=False, add_offset = True):

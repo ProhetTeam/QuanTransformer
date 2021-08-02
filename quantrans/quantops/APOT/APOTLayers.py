@@ -222,9 +222,9 @@ class APOTQuantConv2d(nn.Conv2d):
 @QUANLAYERS.register_module()
 class APOTQuantLinear(nn.Linear):
     ''' 
-    Same as APOTQuantConv2d()
+        Same as APOTQuantConv2d()
      '''
-    def __init__(self, in_features, out_features, bias=True, nbits_w=8, nbits_a=8, debug = False, power=True, additive=True, grad_scale=None, quant_activation=True):
+    def __init__(self, in_features, out_features, bias=True, bit_w=8, bit_a=8, debug = False, power=True, additive=True, grad_scale=None, quant_activation=True):
         super(APOTQuantLinear, self).__init__(in_features, out_features, bias=bias)
         self.layer_type = 'QuantLinear'
         self.bit_w = bit_w
@@ -280,13 +280,13 @@ class APOTQuantLinear(nn.Linear):
 @QUANLAYERS.register_module()
 class EightBitQuantConv(nn.Conv2d):
     ''' args:
-        bit_w(int): bitwidth for the weight quantization,
-        bit_a(int): bitwidth for the activation quantization,
-        power(bool): (A)PoT or Uniform quantization
-        additive(float): Use additive or vanilla PoT quantization 
+            bit_w(int): bitwidth for the weight quantization,
+            bit_a(int): bitwidth for the activation quantization,
+            power(bool): (A)PoT or Uniform quantization
+            additive(float): Use additive or vanilla PoT quantization 
         
         procedure:
-        Using uniform quantization to quantize the weights and activations in 8 bit.
+            Using uniform quantization to quantize the weights and activations into 8 bit.
         '''
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=False, quant_activation = False):
         super(EightBitQuantConv, self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups,
@@ -312,7 +312,7 @@ class EightBitQuantConv(nn.Conv2d):
 @QUANLAYERS.register_module()
 class EightBitQuantLinear(nn.Linear):
     """
-    Same as EightBitQuantConv()
+        Same as EightBitQuantConv()
     """
     def __init__(self, in_features, out_features, bias=True, quant_activation = False):
         super(EightBitQuantLinear, self).__init__(in_features, out_features, bias)

@@ -14,19 +14,19 @@ from .quantops.builder import build_quanlayer
 from .utils import dict_merge
 
 @QUANTRANSFORMERS.register_module()
-class QuanTransformerV2(BaseQuanTransformer, nn.Module):
+class QuanTransformer(BaseQuanTransformer, nn.Module):
     """
     Args: 
-    quan_policy(dict()): which quantization method you want to use.
-    special_layers: you can assign some special layers which you want to use special quantization methods \
-    (for instance, the first conv layer and the last fc layer often adopts 8-bit quantization)
+        quan_policy(dict): which quantization method you want to use.
+        special_layers: you can assign some special layers which you want to use special quantization methods \
+        (for instance, the first conv layer and the last fc layer often adopts 8-bit quantization)
 
     """
     def __init__(self, 
                  quan_policy = dict(),
                  special_layers = None,
                  **kwargs):
-        super(QuanTransformerV2, self).__init__()
+        super(QuanTransformer, self).__init__()
         self.special_layers = special_layers
 
         self.register_dict = OrderedDict()

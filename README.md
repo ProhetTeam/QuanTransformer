@@ -34,20 +34,19 @@ pip3 install -r requirements.txt
 git submodule init 
 git submodule update 
 #or git submodule update --init --recursive 
-
 ```
 
-*Step 2: Install quantrans & quantops*
+*Step 3: Install quantrans & quantops*
 ```shell
 cd QuanTransformer
 python3 setup.py install # or pip3 install -v -e . 
 ```
 From then, you can use the different quant operators in your projects.
 
-To verify you can use the quant operators normally, you can test in terminal as follows:
+To verify that you can use the quant operators normally, you can test in terminal as follows:
 ```shell
 >>>python
 >>>from quantrans.quantops import LSQ
 >>>
 ```
-Also, you can use the QuanTransformer() function from quantrans. 
+Also, you can use the ```QuanTransformer()``` function from ```quantrans```. 
