@@ -18,34 +18,39 @@ class RoundWithGradient(torch.autograd.Function):
 class DSQConv(nn.Conv2d):
     """Applies a quantized 2D convolution layers in DSQ way.
 
-    Args:
-        in_channels (int): Number of channels in the input image
-        out_channels (int): Number of channels produced by the convolution
-        kernel_size (int or tuple): Size of the convolving kernel
-        stride (int or tuple, optional): Stride of the convolution. Default: 1
-        padding (int, tuple or str, optional): Padding added to both sides of
+    args:
+        in_channels(int): Number of channels in the input image
+        out_channels(int): Number of channels produced by the convolution
+        kernel_size(int or tuple): Size of the convolving kernel
+        stride(int or tuple, optional): Stride of the convolution. Default: 1
+        padding(int, tuple or str, optional): Padding added to both sides of
             the input. Default: 0
-        dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
-        groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1
-        bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
-        momentum (float, optional): The momentum value used for the running_bound computation. Default: 0.1
-        nbits_w (int): Bitwidth for the weight quantization
-        nbits_a (int): Bitwidth for the activation quantization
-        quant_activation (bool, optional): If ``True``, quantizes activation. Default: ``True``
-        bSetQ (bool, optional): If ``True``, performs quantization. Default: ``True``
-        alpha_thres (float, optinal): The threshold used for alpha clipping. Default: 0.5
-        debug (bool, optional):  If ``True``, saves quantized results. Default: ``False`` 
-        bias_quant (bool, optional): If ``True``, quantizes bias. Default: ``False`` 
-    Procedure:
-       
+        dilation(int or tuple, optional): Spacing between kernel elements. Default: 1
+        groups(int, optional): Number of blocked connections from input channels to output channels. Default: 1
+        bias(bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+        momentum(float, optional): The momentum value used for the running_bound computation. Default: 0.1
+        nbits_w(int): Bitwidth for the weight quantization
+        nbits_a(int): Bitwidth for the activation quantization
+        quant_activation(bool, optional): If ``True``, quantizes activation. Default: ``True``
+        bSetQ(bool, optional): If ``True``, performs quantization. Default: ``True``
+        alpha_thres(float, optinal): The threshold used for alpha clipping. Default: 0.5
+        debug(bool, optional):  If ``True``, saves quantized results. Default: ``False`` 
+        bias_quant(bool, optional): If ``True``, quantizes bias. Default: ``False`` 
+
+    procedure:
        Quantization
+
         .. math::
-            \varphi(x) = s \tanh{k(x-m_i)},
-            output = \min{quant_max, \max{quant_min, l + \Delta (i+\frac{\varphi(x)+1}{2})}}.
+            \\begin{aligned}
+            \\varphi(x) & = s \\tanh{k(x-m_i)}, \\\\
+            output & = \\min{(quant_{max}, \\max{(quant_{min}, l + \\Delta (i+\\frac{\\varphi(x)+1}{2}))})}.
+            \\end{aligned}
         
-        `quant_max`:  running upper bound of the quantized domain
-        `quant_min`:  running lower bound of the quantized domain
-        :math:`\Delta`: quantization scale
+        `quant_max`:  running upper bound of the quantized domain,
+
+        `quant_min`:  running lower bound of the quantized domain,
+
+        :math:`\\Delta`: quantization scale.
 
     """
     def __init__(

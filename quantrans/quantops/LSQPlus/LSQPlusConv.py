@@ -80,11 +80,17 @@ args:
     nbits_a(int): bitwidth for the activation quantization,
 procedure:
     g = 1.0 / math.sqrt(x.numel() * Qp) if self.scale_grad else 1.0
+
     act_alpha = grad_scale(self.act_alpha, g) if self.training else self.running_act_alpha
+
     if not self.add_offset:
+
         x_q = round_pass((x / act_alpha ).clamp(Qn, Qp)) * act_alpha 
+
     else:
+
         act_offset = grad_scale(self.act_offset, g) if self.training else self.running_act_offset
+        
         x_q = round_pass((x - act_offset) / act_alpha).clamp(Qn, Qp) * act_alpha + act_offset
     """
     def __init__(

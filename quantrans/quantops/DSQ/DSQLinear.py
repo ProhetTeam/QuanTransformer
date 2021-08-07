@@ -18,28 +18,33 @@ class RoundWithGradient(torch.autograd.Function):
 class DSQLinear(nn.Linear):
     """Applies a quantized linear layers in DSQ way.
 
-    Args:
-        in_features (int): Size of each input sample
-        out_features (int): Size of each output sample
-        bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
-        momentum (float, optional): The momentum value used for the running_bound computation. Default: 0.1
-        nbits_w (int): Bitwidth for the weight quantization
-        nbits_a (int): Bitwidth for the activation quantization
-        quant_activation (bool, optional): If ``True``, quantizes activation. Default: ``True``
-        bSetQ (bool, optional): If ``True``, performs quantization. Default: ``True``
-        alpha_thres (float, optinal): The threshold used for alpha clipping. Default: 0.5
-        debug (bool, optional): If ``True``, saves quantized results. Default: ``False`` 
-        bias_quant (bool, optional): If ``True``, quantizes bias. Default: ``False`` 
+    args:
+        in_features(int): Size of each input sample
+        out_features(int): Size of each output sample
+        bias(bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+        momentum(float, optional): The momentum value used for the running_bound computation. Default: 0.1
+        nbits_w(int): Bitwidth for the weight quantization
+        nbits_a(int): Bitwidth for the activation quantization
+        quant_activation(bool, optional): If ``True``, quantizes activation. Default: ``True``
+        bSetQ(bool, optional): If ``True``, performs quantization. Default: ``True``
+        alpha_thres(float, optinal): The threshold used for alpha clipping. Default: 0.5
+        debug(bool, optional): If ``True``, saves quantized results. Default: ``False`` 
+        bias_quant(bool, optional): If ``True``, quantizes bias. Default: ``False`` 
+
     Procedure:
-       
        Quantization
+
         .. math::
-            \varphi(x) = s \tanh{k(x-m_i)},
-            output = \min{quant_max, \max{quant_min, l + \Delta (i+\frac{\varphi(x)+1}{2})}}.
+            \\begin{aligned}
+            \\varphi(x) & = s \\tanh{(k(x-m_i))}, \\\\
+            output & = \\min{(quant_{max}, \\max{(quant_{min}, l + \\Delta (i+\\frac{\\varphi(x)+1}{2}))})}.
+            \\end{aligned}
         
-        `quant_max`:  running upper bound of the quantized domain
-        `quant_min`:  running lower bound of the quantized domain
-        :math:`\Delta`: quantization scale
+        `quant_max`: running upper bound of the quantized domain,
+
+        `quant_min`: running lower bound of the quantized domain,
+
+        :math:`\\Delta`: quantization scale.
 
     """
     def __init__(self, in_features, out_features, bias=True, nbits_w = 4, nbits_a = 4, QInput = True, bSetQ = True, momentum = 0.1, bias_quant = False):

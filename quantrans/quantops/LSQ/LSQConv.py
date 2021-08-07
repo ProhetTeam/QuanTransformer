@@ -29,9 +29,10 @@ args:
     nbits_a(int): bitwidth for the activation quantization,
 procedure:
     1.the quantizd representation of the data v_q can be calculated by follows:
-    v_q = round(clip(\frac{v}{s}, -Q_N, Q_P)),
+    :math:`v_q = round(clip(\\frac{v}{s}, -Q_N, Q_P))`,
     where the scale s is learnable parameter.
-    2. besides, the hypeparameter g can be defined by \frac{1.0}{\sqrt(x.numel() \times Q_P)}
+    
+    2. besides, the hypeparameter g can be defined by :math:`\\frac{1.0}{\\sqrt(x.numel() \\times Q_P)}`
 
     details can see in https://arxiv.org/pdf/1902.08153.pdf
 """

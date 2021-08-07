@@ -8,29 +8,36 @@ import torch.nn.functional as F
 class DRFLinear(nn.Linear):
     """Applies a quantized linear layers in DoReFa-Net way.
 
-    Args:
-        in_features (int):  Size of each input sample
-        out_features (int): Size of each output sample
-        bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+    args:
+        in_features(int):  Size of each input sample
+        out_features(int): Size of each output sample
+        bias(bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
         bit_w(int, optional): Bitwidth for the weight quantization. Default: ``8``
         bit_a(int, optional): Bitwidth for the activation quantization. Default: ``8``
         quant_activation(bool, optional): If ``True``, quantizes activation. Default: ``True``
 
-    Procedure:
-       
+    procedure:
         Weight quantization
+
         .. math::
-            w_m = \frac{\tanh{weight}}{2 \max{\| \tanh{weight} \|}},
-            output = \min{quant_max, \max{quant_min, round(w_m / scale)}}.
+            \\begin{aligned}
+            w_m & = \\frac{\\tanh{(weight)}}{2 \max{\| \\tanh{(weight)} \|}}, \\\\
+            output & = \min{(quant_{max}, \max{(quant_{min}, round(w_m / scale))})}.
+            \\end{aligned}
             
         Activation quantization
-        .. math::
-            a_m = clip(activation, 0, 1),
-            output = \min{quant_max, \max{quant_min, round(a_m / scale)}}.
 
-        `quant_max`:  upper bound of the quantized domain
-        `quant_min`:  lower bound of the quantized domain
-        `scale`: quantization scale
+        .. math::
+            \\begin{aligned}
+            a_m & = clip(activation, 0, 1), \\\\
+            output & = \min{(quant_{max}, \max{(quant_{min}, round(a_m / scale))})}.
+            \\end{aligned}
+
+        `quant_max`:  upper bound of the quantized domain,
+
+        `quant_min`:  lower bound of the quantized domain,
+
+        `scale`: quantization scale.
 
     """
 

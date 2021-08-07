@@ -13,35 +13,41 @@ def round_pass(x):
 class DRFConv(nn.Conv2d):
     """Applies a quantized 2D convolution layers in DoReFa-Net way.
 
-    Args:
-        in_channels (int): Number of channels in the input image
-        out_channels (int): Number of channels produced by the convolution
-        kernel_size (int or tuple): Size of the convolving kernel
-        stride (int or tuple, optional): Stride of the convolution. Default: 1
-        padding (int, tuple or str, optional): Padding added to both sides of
-            the input. Default: 0
-        dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
-        groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1
-        bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
-        nbits_w (int): Bitwidth for the weight quantization
-        nbits_a (int): Bitwidth for the activation quantization
-        quant_activation (bool, optional): If ``True``, quantizes activation. Default: ``True``
+    args:
+        in_channels(int): Number of channels in the input image, 
+        out_channels(int): Number of channels produced by the convolution 
+        kernel_size(int or tuple): Size of the convolving kernel 
+        stride(int or tuple, optional): Stride of the convolution. Default: 1 
+        padding(int, tuple or str, optional): Padding added to both sides of the input. Default: 0 
+        dilation(int or tuple, optional): Spacing between kernel elements. Default: 1 
+        groups(int, optional): Number of blocked connections from input channels to output channels. Default: 1
+        bias(bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+        nbits_w(int): Bitwidth for the weight quantization
+        nbits_a(int): Bitwidth for the activation quantization
+        quant_activation(bool, optional): If ``True``, quantizes activation. Default: ``True``
 
-    Procedure:
-       
+    procedure:
         Weight quantization
+
         .. math::
-            w_m = \frac{\tanh{weight}}{2 \max{\| \tanh{weight} \|}},
-            output = \min{quant_max, \max{quant_min, round(w_m / scale)}}.
+            \\begin{aligned}
+            w_m & = \\frac{\\tanh{(weight)}}{2 \max{\| \\tanh{(weight)} \|}}, \\\\
+            output & = \min{(quant_{max}, \max{(quant_{min}, round(w_m / scale))})}.
+            \\end{aligned}
             
         Activation quantization
-        .. math::
-            a_m = clip(activation, 0, 1),
-            output = \min{quant_max, \max{quant_min, round(a_m / scale)}}.
 
-        `quant_max`:  upper bound of the quantized domain
-        `quant_min`:  lower bound of the quantized domain
-        `scale`: quantization scale
+        .. math::
+            \\begin{aligned}
+            a_m & = clip(activation, 0, 1), \\\\
+            output & = \min{(quant_{max}, \max{(quant_{min}, round(a_m / scale))})}.
+            \\end{aligned}
+
+        `quant_max`:  upper bound of the quantized domain,
+
+        `quant_min`:  lower bound of the quantized domain,
+
+        `scale`: quantization scale.
 
     """
 

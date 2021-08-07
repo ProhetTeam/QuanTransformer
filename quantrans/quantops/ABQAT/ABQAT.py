@@ -56,6 +56,7 @@ class ApdativeSTEFF(torch.autograd.Function):
         LSQPlus: y = Round[clamp(x/s, n, p)] * s
         Args:
             x: input tensor
+            
             scale: QAT scale
         return:
             x_quant: quantization tensor of x
@@ -72,7 +73,9 @@ class ApdativeSTEFF(torch.autograd.Function):
         r"""
         Backward:
             x_gradient: x[x > p or x < n] = 0 else 1
+
             scale_gradient: -(x - beta)/s + round[(x - beta)/s] else n or p
+
             beta_gradient: 0 or 1
         """
         x, x_hat, scale = ctx.saved_variables
@@ -190,8 +193,11 @@ class ABQATConv2d(nn.Conv2d):
         dist = self.dist(data)
         for _ in range(iters):
             r"""
+
             g = 1.0 / math.sqrt(target.numel() * Qp)
+
             g_offset = grad_scale(offset, g)
+
             g_alpha = grad_scale(alpha, g)
             """
             if add_offset:

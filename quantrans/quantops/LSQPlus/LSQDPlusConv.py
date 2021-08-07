@@ -45,7 +45,9 @@ class LSQPlus(torch.autograd.Function):
         r"""
         Backward:
             x_gradient: x[x > p or x < n] = 0 else 1
+
             scale_gradient: -(x - beta)/s + round[(x - beta)/s] else n or p
+            
             beta_gradient: 0 or 1
         """
         x, x_hat, scale, beta = ctx.saved_variables
@@ -88,6 +90,7 @@ args:
 
 procedure:
     1.initialize the weights/activations scale by using different methods,
+    
     2.there provides three kinds of initiation methods for scale 
 
 """
